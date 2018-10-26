@@ -40,7 +40,8 @@ print_words() and print_top().
 """
 
 import sys
-
+from collections import Counter
+import re
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
@@ -53,9 +54,36 @@ import sys
 # calls the print_words() and print_top() functions which you must define.
 
 
+def p_t_helper(filename):
+    with open(filename) as f:
+        passage = f.read()
+        words = re.findall(r'\w+', passage)
+        lower_case = [word.lower() for word in words]
+        word_counts = Counter(lower_case)
+        top_20 = word_counts.most_common(20)
+        return top_20
+
+
+def print_top(filename):
+    print(p_t_helper(filename))
+
+
+def w_c_helper(filename):
+    with open(filename, 'r') as f:
+        wordcount = Counter(f.read().split())
+        wordcount = {k.lower(): v for k, v in wordcount.items()}
+        return wordcount
+
+
+def print_words(filename):
+    wordcount = w_c_helper(filename)
+    for item in wordcount.items():
+        print("{} : {}".format(*item))
+
+
 def main():
     if len(sys.argv) != 3:
-        print 'usage: ./wordcount.py {--count | --topcount} file'
+        print('usage: ./wordcount.py {--count | --topcount} file')
         sys.exit(1)
 
     option = sys.argv[1]
@@ -65,7 +93,7 @@ def main():
     elif option == '--topcount':
         print_top(filename)
     else:
-        print 'unknown option: ' + option
+        print('unknown option: ' + option)
         sys.exit(1)
 
 
