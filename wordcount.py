@@ -70,15 +70,22 @@ def print_top(filename):
 
 def w_c_helper(filename):
     with open(filename, 'r') as f:
+        wordcount = sorted(Counter(f.read().lower().split()).items())
+        # wordcount = {v for k, v in wordcount.items()}
+        return wordcount
+
+
+'''def w_c_helper(filename):
+    with open(filename, 'r') as f:
         wordcount = Counter(f.read().split())
         wordcount = {k.lower(): v for k, v in wordcount.items()}
-        return wordcount
+        return wordcount '''
 
 
 def print_words(filename):
     wordcount = w_c_helper(filename)
-    for item in wordcount.items():
-        print("{} : {}".format(*item))
+    for k, v in wordcount:
+        print("{} : {}".format(k, v))
 
 
 def main():
